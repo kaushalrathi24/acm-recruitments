@@ -1,3 +1,5 @@
+from asyncio import tasks
+from re import search
 from django.shortcuts import redirect
 from django.views.generic.list import ListView
 from django.contrib.auth.views import LoginView
@@ -54,6 +56,32 @@ class TransactionsView(LoginRequiredMixin, ListView):
         income = sum([transaction.amount for transaction in context['transactions'] if transaction.type])
         expense = sum([transaction.amount for transaction in context['transactions'] if not transaction.type])
         context['balance'] = income - expense
+
+        search_input = self.request.GET.get('search-area') or ''
+        if search_input:
+            context['transactions'] = context['transactions'].filter(title__startswith = search_input)
+        
+        context['search'] = search_input
+
+        category_values = {}
+        
+        for transaction in context['transactions']:
+            if not(transaction.type and transaction.category == "Income"):
+                if transaction.category in category_values:
+                    category_values[transaction.category] += transaction.amount
+                else:
+                    category_values[transaction.category] = transaction.amount
+
+        categories = []
+        category_expenses = []
+        for category in category_values:
+            categories.append(category)
+            category_expenses.append(category_values[category])
+
+        context['categories'] = categories
+        context['amounts'] = category_expenses
+        context['check'] = sum(category_expenses)
+
         return context
 
 
