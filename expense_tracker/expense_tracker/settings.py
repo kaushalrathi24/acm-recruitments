@@ -11,12 +11,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+
 import os
 import dj_database_url
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -27,12 +26,13 @@ SECRET_KEY = 'django-insecure-nz$)_w8oqv$d#m&)(9-qk&41-7-d5_9-_b=s31u$j)fokioz3)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["walletythetracker.herokuapp.com", '127.0.0.1']
+ALLOWED_HOSTS = [".herokuapp.com", '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -122,14 +122,17 @@ USE_TZ = True
 
 LOGIN_URL = 'login'
 
-
+WHITENOISE_USE_FINDERS = True
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = 'static/'
 
-MEDIA_ROOT = 'media'
-MEDIA_URL = "/media/"
+
+
+# MEDIA_ROOT = 'media'
+# MEDIA_URL = "/media/"
 
 
 # Default primary key field type
@@ -138,3 +141,4 @@ MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+

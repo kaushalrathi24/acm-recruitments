@@ -65,8 +65,14 @@ a:hover{
     font-family: "Montserrat";
     font-weight: bolder;
     font-size: 30px;
-
 }
+
+.overview-text{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
 </style>
 
 <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -112,6 +118,12 @@ a:hover{
     </li>
     {% endfor%}
 </ul> -->
+<div style="margin:auto; width: fit-content; text-align: center;">
+    <div class="main-title">Overview</div>
+    <div class="overview-text">Overall Balance: ${{balance}}</div>
+    <div class="overview-text">{{month}}'s Income: ${{income}}</h3>
+    <div class="overviwe-text">{{month}}'s Expense: ${{expense}}</h4>
+</div>
 
 <div>
     <div class="main-title">My transaction</div>

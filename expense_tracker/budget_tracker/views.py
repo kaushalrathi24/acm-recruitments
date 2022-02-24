@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
+from datetime import datetime
 
 
 from .forms import TransactionForm
@@ -46,6 +47,13 @@ class TransactionsView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['transactions'] = context['transactions'].filter(user=self.request.user.prof)
+        month = datetime.now().strftime("%Y-%m")
+        context['month'] = datetime.now().strftime("%B")
+        context['income'] = sum([transaction.amount for transaction in context['transactions'] if (transaction.type and (transaction.date.strftime("%Y-%m")  == month)) ])
+        context['expense'] = sum([transaction.amount for transaction in context['transactions'] if (not transaction.type and (transaction.date.strftime("%Y-%m")  == month))])
+        income = sum([transaction.amount for transaction in context['transactions'] if transaction.type])
+        expense = sum([transaction.amount for transaction in context['transactions'] if not transaction.type])
+        context['balance'] = income - expense
         return context
 
 
